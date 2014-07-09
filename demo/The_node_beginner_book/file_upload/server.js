@@ -7,7 +7,9 @@ function start(route, handle) {
 		var pathname = url.parse(request.url).pathname;
 		console.log("Request for " + pathname + " received.");
 
-		request.setEncoding("utf8");
+		route(handle, pathname, response, request);
+
+		/*request.setEncoding("utf8");
 
 		request.addListener("data", function(chunk) {
 			postData += chunk;
@@ -16,7 +18,7 @@ function start(route, handle) {
 
 		request.addListener("end", function() {
 			route(handle, pathname, response, postData);
-		});
+		});*/
 
 		/*response.writeHead(200, {"Content-Type":"text/plain"});
 		response.write("Hello World");
