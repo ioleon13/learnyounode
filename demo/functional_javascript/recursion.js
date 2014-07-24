@@ -7,7 +7,7 @@ function getDependencies(tree) {
     var result = [];
     var propArray = Object.keys(tree);
 
-   	function isDup(retArray, element) {
+/*function isDup(retArray, element) {
    		var isDuplicate = false;
    		retArray.forEach(function(ret) {
    			if(ret === element) {
@@ -16,7 +16,7 @@ function getDependencies(tree) {
    		});
 
    		return isDuplicate;
-   	}
+}*/
 
     propArray.forEach(function(property) {
     	if (property === 'dependencies') {
@@ -29,7 +29,7 @@ function getDependencies(tree) {
     					if (pro === 'version') {
     						var versionStr = dependency.concat(depend[prop][pro]);
 
-    						if (!isDup(result, versionStr)) {
+							if (result.indexOf(versionStr) === -1) {
     							result.push(versionStr);
     						}
     					} else if (pro === 'dependencies'){
