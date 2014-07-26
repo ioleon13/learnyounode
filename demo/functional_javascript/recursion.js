@@ -1,22 +1,6 @@
 function getDependencies(tree) {
-    // SOLUTION GOES HERE
-    // Note: Feel free to add additional arguments
-    // to this function for use with recursive calls.
-    // Or not! There are many ways to recurse.
-
     var result = [];
     var propArray = Object.keys(tree);
-
-/*function isDup(retArray, element) {
-   		var isDuplicate = false;
-   		retArray.forEach(function(ret) {
-   			if(ret === element) {
-   				isDuplicate = true;
-   			}
-   		});
-
-   		return isDuplicate;
-}*/
 
     propArray.forEach(function(property) {
     	if (property === 'dependencies') {
@@ -43,8 +27,23 @@ function getDependencies(tree) {
     	}
     });
 
-    result.sort();
-    return result;
+    return result.sort();
 }
+
+/**official solution. use Object.property
+function getDependencies(tree, result) {
+    result = result || [];
+    var dependencies = tree.dependencies || [];
+    Object.keys(dependencies).forEach(function(dep) {
+        var key = dep + '@' + tree.dependencies[dep].version;
+        if (result.indexOf(key) === -1) {
+            result.push(key);
+        }
+
+        getDependencies(tree.dependencies[dep], result);
+    });
+
+    return result.sort();
+}*/
     
 module.exports = getDependencies
