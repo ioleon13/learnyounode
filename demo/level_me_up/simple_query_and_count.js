@@ -6,9 +6,15 @@ module.exports = function(db, date, callback) {
 	  	count++;
 	  })
 	  .on('error', function(err) {
-	  	callback(err, 0);
+	  	if (callback) {
+	  		callback(err, 0);
+	  		callback = null;
+	  	}
 	  })
 	  .on('end', function() {
-	  	callback(null, count);
+	  	if (callback) {
+	  		callback(null, count);
+	  		callback = null;
+	  	}
 	  });
 }
