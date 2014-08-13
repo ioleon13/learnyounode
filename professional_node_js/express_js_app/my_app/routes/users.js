@@ -21,6 +21,15 @@ router.get('/:name', function(req, res, next) {
   }
 });
 
+router.post('/', function(req, res) {
+  if (users[req.body.username]) {
+    res.send('Conflict', 409);
+  } else{
+    users[req.body.username] = req.body;
+    res.redirect('/users');
+  }
+});
+
 router.post('/:name', function(req, res, next) {
   if (req.body._method === 'DELETE') {
     console.log('delete a user!!!');
