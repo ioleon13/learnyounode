@@ -1,8 +1,8 @@
-- if (locals.session.user) {
+- if (name) {
 
   p
     span Hello&nbsp;
-    span= locals.session.user.name
+    span= name
     span !
   p
     form(method='POST', action='/session')

@@ -4,6 +4,8 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var partials = require('express-partials');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -15,14 +17,26 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(favicon());
+app.use(partials());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+app.use(session({
+    secret: 'my secret string',
+    name: 'username'
+}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+require('./routes/session')(app);
 
 app.use('/', routes);
 app.use('/users', users);
+
+app.use(function(req, res, next) {
+    res.locals.name = req.session.name;
+    next();
+});
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
