@@ -30,13 +30,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require('./routes/session')(app);
 
-app.use('/', routes);
-app.use('/users', users);
-
 app.use(function(req, res, next) {
+    if (req.session.name) {
+        console.log('get req session name:', req.session.name);
+    } else {
+        console.log('req session name is empty!');
+    }
     res.locals.name = req.session.name;
     next();
 });
+
+app.use('/', routes);
+app.use('/users', users);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
