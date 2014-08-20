@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var users = require('../data/users')
+var users = require('../data/users');
+var notLoggedIn = require('./middleware/not_logged_in');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -8,7 +9,7 @@ router.get('/', function(req, res) {
   res.render('users/index', {title: 'Users', users: users});
 });
 
-router.get('/new', function(req, res) {
+router.get('/new', notLoggedIn, function(req, res) {
   res.render('users/new', {title: 'New User'});
 });
 
@@ -21,7 +22,7 @@ router.get('/:name', function(req, res, next) {
   }
 });
 
-router.post('/', function(req, res) {
+router.post('/', notLoggedIn, function(req, res) {
   if (users[req.body.username]) {
     res.send('Conflict', 409);
   } else{

@@ -1,12 +1,13 @@
 var users = require('../data/users');
+var notLoggedIn = require('./middleware/not_logged_in');
 
 module.exports = function(app) {
 
-  app.get('/session/new', function(req, res) {
+  app.get('/session/new', notLoggedIn, function(req, res) {
     res.render('session/new', {title: 'Log in'});
   });
 
-  app.post('/session', function(req, res) {
+  app.post('/session', notLoggedIn, function(req, res) {
     if (req.body._method === 'DELETE') {
       console.log('Logout to destroy session');
       req.session.destroy();
