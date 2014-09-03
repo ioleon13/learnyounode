@@ -7,7 +7,7 @@ module.exports = function(app) {
     res.render('session/new', {title: 'Log in'});
   });
 
-  app.post('/session', notLoggedIn, function(req, res) {
+  app.post('/session', function(req, res) {
     if (req.body._method === 'DELETE') {
       console.log('Logout to destroy session');
       req.session.destroy();
