@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var users = require('../data/users');
 var notLoggedIn = require('./middleware/not_logged_in');
+var loadUser = require('./middleware/load_user');
+var restrictUserToSelf = require('./middleware/restrict_user_to_self');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -13,13 +15,14 @@ router.get('/new', notLoggedIn, function(req, res) {
   res.render('users/new', {title: 'New User'});
 });
 
-router.get('/:name', function(req, res, next) {
-  var user = users[req.params.name];
+router.get('/:name', loadUser, function(req, res, next) {
+  /*var user = users[req.params.name];
   if (user) {
     res.render('users/profile', {title: 'User profile', user: user});
   } else{
     next();
-  }
+  }*/
+  res.render('users/profile', {title: 'User profile', user: req.user});
 });
 
 router.post('/', notLoggedIn, function(req, res) {
@@ -31,15 +34,17 @@ router.post('/', notLoggedIn, function(req, res) {
   }
 });
 
-router.post('/:name', function(req, res, next) {
+router.post('/:name', loadUser, restrictUserToSelf, function(req, res, next) {
   if (req.body._method === 'DELETE') {
     console.log('delete a user!!!');
-    if (users[req.params.name]) {
+    /*if (users[req.params.name]) {
       delete users[req.params.name];
       res.redirect('/users');
     } else{
       next();
-    }
+    }*/
+    delete users[req.user.username];
+    res.redirect('/users');
   }
 });
 
