@@ -24,19 +24,24 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(session({
     secret: 'my secret string',
-    name: 'username'
+    name: {
+        username: 'username',
+        name: 'name',
+        bio: 'bio',
+        password: ''
+    }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 require('./routes/session')(app);
 
 app.use(function(req, res, next) {
-    if (req.session.name) {
-        console.log('get req session name:', req.session.name);
+    if (req.session.user) {
+        console.log('get req session name:', req.session.user.username);
     } else {
         console.log('req session name is empty!');
     }
-    res.locals.name = req.session.name;
+    res.locals.name = req.session.user.username;
     next();
 });
 

@@ -18,7 +18,7 @@ module.exports = function(app) {
         users[req.body.username].password === req.body.password) {
           console.log('Logged! set session name to: ',
             users[req.body.username].name);
-          req.session.name = users[req.body.username].name;
+          req.session.user = users[req.body.username];
           res.redirect('/users');
       } else{
           res.redirect('/session/new');
