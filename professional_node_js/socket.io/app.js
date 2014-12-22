@@ -24,7 +24,13 @@ io.sockets.on('connection', function(socket) {
 			username = socket.username;
 		}
 
-		socket.broadcast.emit('serverMessage', username + ' said: ' + content);
+		var broadcast = socket.broadcast;
+		var message = content;
+		if (socket.room) {
+			broadcast.to(socket.room);
+		}
+
+		broadcast.emit('serverMessage', username + ' said: ' + message);
 	});
 
 	socket.on('login', function(username) {
@@ -33,6 +39,33 @@ io.sockets.on('connection', function(socket) {
 			socket.emit('serverMessage', 'Currently logged in as ' + socket.username);
 			socket.broadcast.emit('serverMessage', 'User ' + socket.username + ' logged in');
 		}
+	});
+
+	socket.on('disconnect', function() {
+		var username = socket.id;
+		if (socket.username) {
+			username = socket.username;
+		}
+
+		socket.broadcast.emit('serverMessage', 'User ' + username + ' disconneted');
+	});
+
+	socket.on('join', function(room) {
+		var oldroom = socket.room;
+
+		socket.room = room;
+		socket.join(room);
+		if (oldroom) {
+			socket.leave(room);
+		}
+
+		var username = socket.id;
+		if (socket.username) {
+			username = socket.username;
+		}
+
+		socket.emit('serverMessage', 'You joined room <' + room + '>');
+		socket.broadcast.to(room).emit('serverMessage', 'User [' + username + '] joined this room');
 	});
 
 	socket.emit('login');
